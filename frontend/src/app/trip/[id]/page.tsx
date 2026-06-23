@@ -7,7 +7,8 @@ import API from "../../../services/api";
 export default function TripDetails() {
   const { id } = useParams();
   const router = useRouter();
-
+  const [safetyGuide, setSafetyGuide] = useState<any>(null);
+  const [loadingSafety, setLoadingSafety] = useState(false);
   const [trip, setTrip] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -57,6 +58,22 @@ export default function TripDetails() {
       setAnswer(res.data.answer);
     } catch (error) {
       console.log(error);
+    }
+  };
+  const generateSafetyGuide = async () => {
+    try {
+      setLoadingSafety(true);
+
+      const res = await API.post("/trips/safety-guide", {
+        destination: trip.destination,
+      });
+
+      setSafetyGuide(res.data.guide);
+    } catch (error) {
+      console.log(error);
+      alert("Failed to generate safety guide");
+    } finally {
+      setLoadingSafety(false);
     }
   };
 
@@ -261,7 +278,164 @@ export default function TripDetails() {
             ),
           )}
         </div>
+        <div className="mt-12">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-3xl font-bold">🛡️ Travel Safety Guide</h2>
 
+            <button
+              onClick={generateSafetyGuide}
+              disabled={loadingSafety}
+              className="bg-red-600 text-white px-5 py-3 rounded-xl hover:bg-red-700"
+            >
+              {loadingSafety ? "Generating..." : "🛡️ Generate Safety Guide"}
+            </button>
+          </div>
+          {safetyGuide && (
+            <div className="bg-white rounded-3xl shadow-lg p-8 space-y-8">
+              {/* Common Scams */}
+
+              <div>
+                <h3 className="text-2xl font-bold mb-4">
+                  🚨 Common Tourist Scams
+                </h3>
+
+                {safetyGuide.commonScams?.map((scam: any, index: number) => (
+                  <div key={index} className="bg-red-50 p-4 rounded-xl mb-3">
+                    <h4 className="font-semibold">{scam.title}</h4>
+
+                    <p className="text-gray-600 mt-2">{scam.description}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Safe Areas */}
+
+              <div>
+                <h3 className="text-2xl font-bold mb-4">🏙️ Safe Areas</h3>
+
+                <ul className="space-y-2">
+                  {safetyGuide.safeAreas?.map((area: string, index: number) => (
+                    <li key={index}>✅ {area}</li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Areas To Be Careful */}
+
+              <div>
+                <h3 className="text-2xl font-bold mb-4">
+                  ⚠️ Areas Requiring Caution
+                </h3>
+
+                <ul className="space-y-2">
+                  {safetyGuide.cautionAreas?.map(
+                    (area: string, index: number) => (
+                      <li key={index}>⚠️ {area}</li>
+                    ),
+                  )}
+                </ul>
+              </div>
+
+              {/* Transport Tips */}
+
+              <div>
+                <h3 className="text-2xl font-bold mb-4">
+                  🚕 Transportation Safety
+                </h3>
+
+                <ul className="space-y-2">
+                  {safetyGuide.transportTips?.map(
+                    (tip: string, index: number) => (
+                      <li key={index}>• {tip}</li>
+                    ),
+                  )}
+                </ul>
+              </div>
+
+              {/* Emergency */}
+
+              <div className="bg-blue-50 rounded-2xl p-5">
+                <h3 className="text-2xl font-bold mb-4">
+                  🏥 Emergency Information
+                </h3>
+
+                <p>
+                  <strong>Emergency Number:</strong>{" "}
+                  {safetyGuide.emergencyInfo?.emergencyNumber}
+                </p>
+
+                <p className="mt-2">
+                  <strong>Tourist Helpline:</strong>{" "}
+                  {safetyGuide.emergencyInfo?.touristHelpline}
+                </p>
+              </div>
+
+              {/* Cultural Tips */}
+
+              <div>
+                <h3 className="text-2xl font-bold mb-4">
+                  🙏 Cultural Etiquette
+                </h3>
+
+                <ul className="space-y-2">
+                  {safetyGuide.culturalEtiquette?.map(
+                    (tip: string, index: number) => (
+                      <li key={index}>• {tip}</li>
+                    ),
+                  )}
+                </ul>
+              </div>
+
+              {/* Weather */}
+
+              <div>
+                <h3 className="text-2xl font-bold mb-4">
+                  🌦️ Weather Precautions
+                </h3>
+
+                <ul className="space-y-2">
+                  {safetyGuide.weatherPrecautions?.map(
+                    (tip: string, index: number) => (
+                      <li key={index}>• {tip}</li>
+                    ),
+                  )}
+                </ul>
+              </div>
+
+              {/* Solo */}
+
+              <div>
+                <h3 className="text-2xl font-bold mb-4">
+                  🎒 Solo Traveler Tips
+                </h3>
+
+                <ul className="space-y-2">
+                  {safetyGuide.soloTravelerTips?.map(
+                    (tip: string, index: number) => (
+                      <li key={index}>• {tip}</li>
+                    ),
+                  )}
+                </ul>
+              </div>
+
+              {/* Women */}
+
+              <div>
+                <h3 className="text-2xl font-bold mb-4">
+                  👩 Women Traveler Tips
+                </h3>
+
+                <ul className="space-y-2">
+                  {safetyGuide.womenTravelerTips?.map(
+                    (tip: string, index: number) => (
+                      <li key={index}>• {tip}</li>
+                    ),
+                  )}
+                </ul>
+              </div>
+            </div>
+          )}
+        </div>
         {/* AI ASSISTANT */}
 
         <h2 className="text-3xl font-bold mt-12 mb-6">AI Travel Assistant</h2>

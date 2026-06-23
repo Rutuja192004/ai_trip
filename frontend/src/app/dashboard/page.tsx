@@ -1,26 +1,55 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import API from "../../services/api";
 import Navbar from "../../components/Navbar";
 import TripCard from "../../components/TripCard";
 import Link from "next/link";
 
 export default function Dashboard() {
+  const router = useRouter();
+
   const [trips, setTrips] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      router.replace("/login");
+      return;
+    }
+
     const fetchTrips = async () => {
       try {
         const res = await API.get("/trips");
-        setTrips(res.data.trips);
-      } catch (error) {
+        setTrips(res.data.trips || []);
+      } catch (error: any) {
         console.log(error);
+
+        if (error?.response?.status === 401) {
+          localStorage.clear();
+          router.replace("/login");
+        }
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchTrips();
-  }, []);
+  }, [router]);
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <div className="min-h-screen flex items-center justify-center">
+          Loading...
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -36,13 +65,6 @@ export default function Dashboard() {
                 Manage and explore your AI-generated journeys
               </p>
             </div>
-
-            <Link
-              href="/create-trip"
-              className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow"
-            >
-              + Create Trip
-            </Link>
           </div>
 
           {trips.length === 0 ? (

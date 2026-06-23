@@ -4,6 +4,7 @@ const {
   generateItinerary,
   regenerateDayAI,
   travelChatAI,
+  generateSafetyGuideAI,
 } = require("../services/aiService");
 
 // =======================
@@ -301,6 +302,26 @@ exports.regenerateDay = async (req, res) => {
     });
   } catch (error) {
     console.error("REGENERATE ERROR:", error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.getSafetyGuide = async (req, res) => {
+  try {
+    const { destination } = req.body;
+
+    const guide = await generateSafetyGuideAI(destination);
+
+    res.json({
+      success: true,
+      guide,
+    });
+  } catch (error) {
+    console.error(error);
 
     res.status(500).json({
       success: false,

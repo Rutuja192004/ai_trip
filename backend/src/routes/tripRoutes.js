@@ -10,10 +10,11 @@ const {
   deleteTrip,
   regenerateDay,
   travelChat,
+  getSafetyGuide,
 } = require("../controllers/tripController");
 // Create Trip
 router.post("/", protect, createTrip);
-
+router.post("/safety-guide", protect, getSafetyGuide);
 // All Trips
 router.get("/", protect, getTrips);
 

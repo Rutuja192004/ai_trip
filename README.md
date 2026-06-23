@@ -557,6 +557,67 @@ Delete Trip
 Regenerate Day
 Extra Value
 
+
+
+### 🌟 Creative Feature – AI Travel Safety Guide
+
+In addition to the core project requirements, I implemented an **AI-powered Travel Safety Guide** to help travelers make safer and more informed decisions before visiting a destination.
+
+### Problem
+
+Most travel planners focus only on attractions, hotels, and itineraries. Travelers often need important information such as:
+
+* Common tourist scams
+* Safe neighborhoods
+* Areas requiring caution
+* Transportation safety tips
+* Emergency contact information
+* Cultural etiquette
+* Weather-related precautions
+* Advice for solo and women travelers
+
+Finding this information usually requires searching multiple websites and travel forums.
+
+### Solution
+
+The AI Travel Safety Guide generates destination-specific safety recommendations using a Large Language Model (LLM).
+
+Users can click the **"🛡️ Travel Safety Guide"** button from the trip details page to receive personalized safety insights for their selected destination.
+
+### Features
+
+* 🚨 Common Tourist Scams
+* 🏙️ Safe Areas
+* ⚠️ Areas Requiring Caution
+* 🚕 Transportation Safety Tips
+* 🏥 Emergency Information
+* 🙏 Cultural Etiquette
+* 🌦️ Weather Precautions
+* 🎒 Solo Traveler Tips
+* 👩 Women Traveler Safety Tips
+
+### Technical Implementation
+
+* Frontend: Next.js + Tailwind CSS
+* Backend: Node.js + Express
+* AI Model: Groq Llama 3.3 70B Versatile
+* API Endpoint: `/api/trips/safety-guide`
+
+The feature dynamically generates safety recommendations based on the selected destination and displays them in an easy-to-read format within the application.
+
+### Why This Feature?
+
+This feature demonstrates:
+
+* Creativity
+* Problem Solving
+* Real-world usefulness
+* Practical application of AI beyond itinerary generation
+
+It enhances the travel planning experience by helping users travel more confidently and safely.
+
+
+
 Production-style security.
 # Author
 
